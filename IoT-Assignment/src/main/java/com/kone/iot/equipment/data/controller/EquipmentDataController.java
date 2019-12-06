@@ -1,5 +1,6 @@
 package com.kone.iot.equipment.data.controller;
 
+import com.google.gson.Gson;
 import com.kone.iot.equipment.data.domain.EquipmentRecord;
 import com.kone.iot.equipment.data.exception.ApplicationException;
 import com.kone.iot.equipment.data.service.EquipmentService;
@@ -23,23 +24,28 @@ public class EquipmentDataController {
     private static final Logger LOGGER = LoggerFactory.getLogger(EquipmentDataController.class);
 
     private final EquipmentService equipmentService;
+    private final Gson gson;
 
     @Autowired
-    public EquipmentDataController(EquipmentService equipmentService) {
+    public EquipmentDataController(EquipmentService equipmentService, Gson gson) {
         this.equipmentService = equipmentService;
+        this.gson = gson;
     }
 
     @ApiOperation(value = "Get list of equipments based on count ", response = EquipmentRecord.class)
     @GetMapping(value = "/search", produces = "application/json")
     public ResponseEntity<?> getEquipmentData(@RequestParam(value = "limit") Integer limit) {
+        String message = null;
         if (limit <= 0) {
-            return new ResponseEntity<>("Limit should be greater than 0", HttpStatus.BAD_REQUEST);
+            message = "Limit should be greater than 0";
+            return new ResponseEntity<>(gson.toJson(message), HttpStatus.BAD_REQUEST);
         }
 
         List<EquipmentRecord> records = equipmentService.getEquipmentByCount(limit);
 
         if (records.isEmpty()) {
-            return new ResponseEntity<>("No records available", HttpStatus.OK);
+            message = "No records available";
+            return new ResponseEntity<>(gson.toJson(message), HttpStatus.OK);
         }
         return ResponseEntity.ok(records);
     }
@@ -47,10 +53,12 @@ public class EquipmentDataController {
     @ApiOperation(value = "Get equipment details based on equipmentNumber ", response = EquipmentRecord.class)
     @GetMapping(value = "/{equipmentNumber}", produces = "application/json")
     public ResponseEntity<?> getEquipmentById(@PathVariable final String equipmentNumber) {
+        String message = null;
         Optional<EquipmentRecord> record = equipmentService.getByEquipmentId(valueOf(equipmentNumber));
 
         if (!record.isPresent()) {
-            return new ResponseEntity<>("No equipment available with id: " + equipmentNumber, HttpStatus.OK);
+            message = "No equipment available with id: " + equipmentNumber;
+            return new ResponseEntity<>(gson.toJson(message), HttpStatus.OK);
         }
 
         return ResponseEntity.ok(record.get());
@@ -59,14 +67,17 @@ public class EquipmentDataController {
     @ApiOperation(value = "Creates a new equipment")
     @PostMapping(path = "/", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Object> createEquipment(@RequestBody EquipmentRecord record) {
+        String message = null;
         try {
             boolean saveStatus = equipmentService.save(record);
             if (saveStatus) {
-                return new ResponseEntity<>("Successfully save equipment with Id " + record.getEquipmentId(), HttpStatus.CREATED);
+                message = "Successfully saved equipment with Id " + record.getEquipmentId();
+                return new ResponseEntity<>(gson.toJson(message), HttpStatus.CREATED);
             }
         } catch (ApplicationException ex) {
             LOGGER.error(ex.getMessage());
         }
-        return new ResponseEntity<>("{ Equipment with Id " + record.getEquipmentId() + " already exist! }", HttpStatus.CONFLICT);
+        message = "Equipment with Id " + record.getEquipmentId() + " already exist!";
+        return new ResponseEntity<>(gson.toJson(message), HttpStatus.CONFLICT);
     }
 }

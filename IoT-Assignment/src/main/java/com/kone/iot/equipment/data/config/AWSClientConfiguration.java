@@ -6,6 +6,7 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +34,11 @@ public class AWSClientConfiguration {
             LOGGER.error("Unable to create DynamoDB mapper...");
             throw ex;
         }
+    }
+
+    @Bean
+    public Gson getGson() {
+        return new Gson();
     }
 
     private AWSCredentialsProvider getAWSCredentials() {
