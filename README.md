@@ -1,6 +1,11 @@
 # AWS-IoT-Assignment
 REST APIs to perform CRUD operations on Equipment
 
+APIs:-
+   GET:- http://34.225.141.189:8181/iot-assignment/equipment/61
+   GET:- http://34.225.141.189:8181/iot-assignment/equipment/search?limit=10
+   POST:- http://34.225.141.189:8181/iot-assignment/equipment/
+
 1. Jar has been transfer to EC2 using FileZela desktop application.
 2. Command used to run application on EC2 linux server.
     - nohup java -Xms512m -Xmx1024m -jar IoT-Assignment-1.0.jar &
