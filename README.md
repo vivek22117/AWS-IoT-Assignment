@@ -5,6 +5,9 @@ APIs:-
    GET:- http://34.225.141.189:8181/iot-assignment/equipment/61
    GET:- http://34.225.141.189:8181/iot-assignment/equipment/search?limit=10
    POST:- http://34.225.141.189:8181/iot-assignment/equipment/
+   
+ SWAGGER-API:-
+ 	http://34.225.141.189:8181/iot-assignment/swagger-ui.html#/
 
 1. Jar has been transfer to EC2 using FileZela desktop application.
 2. Command used to run application on EC2 linux server.
