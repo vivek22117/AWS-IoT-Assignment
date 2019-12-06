@@ -13,7 +13,7 @@ APIs:-
 2. Command used to run application on EC2 linux server.
     - nohup java -Xms512m -Xmx1024m -jar IoT-Assignment-1.0.jar &
 
-3. Dummy data has equipmentId between 1 to 1000. Currently dynamoDB holds 25 records.
+3. Dummy data has equipmentId between 1 to 1000. Currently dynamoDB holds approx 30 to 50 records.
 4. POST api call requires below json text to add new Equipment Record:
 {
     "equipmentId": 1001,
